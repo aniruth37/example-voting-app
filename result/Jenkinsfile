@@ -1,0 +1,40 @@
+pipeline {
+
+    agent any
+
+    tools {
+        nodejs 'NodeJS 8.9.0'
+    }
+
+    stages {
+        stage('Build') {
+            when {
+                changeset "result/**"
+            }
+            steps {
+                echo 'Compiling app'
+                dir('result') {
+                    sh 'npm install'
+                }
+            }
+        }
+        stage('Test') {
+            when {
+                changeset "result/**"
+            }
+            steps {
+                echo 'Running Unit tests'
+                dir('result') {
+                    sh 'npm install'
+                    sh 'npm test'
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            echo 'Pipeline completed successfully'
+        }
+    }
+}
