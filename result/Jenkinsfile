@@ -1,15 +1,15 @@
 pipeline {
 
-    agent any
-
-    tools {
-        nodejs 'NodeJS 8.9.0'
+    agent {
+        docker {
+            image 'node:8.16.0-alpine'
+        }
     }
 
     stages {
         stage('Build') {
             when {
-                changeset "result/**"
+                changeset "**/result/**"
             }
             steps {
                 echo 'Compiling app'
@@ -20,7 +20,7 @@ pipeline {
         }
         stage('Test') {
             when {
-                changeset "result/**"
+                changeset "**/result/**"
             }
             steps {
                 echo 'Running Unit tests'
